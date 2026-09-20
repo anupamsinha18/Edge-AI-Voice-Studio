@@ -3,9 +3,9 @@ import { Sparkles, HelpCircle, Shield, Award, Cpu } from 'lucide-react'
 
 export const About: React.FC = () => {
   return (
-    <div className="flex h-full flex-col bg-background p-6 overflow-y-auto space-y-6 max-w-3xl">
+    <div className="flex h-full flex-col bg-background p-3 sm:p-6 pb-24 sm:pb-6 overflow-y-auto space-y-4 sm:space-y-6 max-w-3xl">
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-foreground">About AI Voice Studio</h2>
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">About AI Voice Studio</h2>
         <p className="text-xs text-muted-foreground mt-0.5">Learn more about the technology stack powering this client-side studio.</p>
       </div>
 

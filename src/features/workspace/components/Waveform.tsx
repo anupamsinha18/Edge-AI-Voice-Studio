@@ -6,6 +6,7 @@ interface WaveformProps {
 }
 
 export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
+  const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>(0)
   const { audioElement } = useAudioStore()
@@ -14,19 +15,30 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
   const audioCtxRef = useRef<AudioContext | null>(null)
 
   useEffect(() => {
-    if (!audioElement || typeof window === 'undefined') return
-
     const canvas = canvasRef.current
-    if (!canvas) return
+    const container = containerRef.current
+    if (!canvas || !container || typeof window === 'undefined') return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
     const resizeCanvas = () => {
-      canvas.width = canvas.parentElement?.clientWidth || 400
-      canvas.height = 80
+      const width = container.clientWidth || 300
+      const height = window.innerWidth < 640 ? 60 : 72
+
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.scale(dpr, dpr)
     }
+
     resizeCanvas()
-    window.addEventListener('resize', resizeCanvas)
+    const resizeObserver = new ResizeObserver(() => {
+      resizeCanvas()
+    })
+    resizeObserver.observe(container)
 
     const setupAudioAnalyser = () => {
       try {
@@ -38,8 +50,7 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
         const audioCtx = audioCtxRef.current
 
         if (audioCtx.state === 'suspended') {
-          // Resume on interaction if auto-play is blocked
-          canvas.addEventListener('click', () => audioCtx.resume(), { once: true })
+          audioCtx.resume().catch(() => {})
         }
 
         if (!analyserRef.current) {
@@ -49,8 +60,7 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
 
         const analyser = analyserRef.current
 
-        // Bind source node only once
-        if (!sourceRef.current) {
+        if (audioElement && !sourceRef.current) {
           sourceRef.current = audioCtx.createMediaElementSource(audioElement)
           sourceRef.current.connect(analyser)
           analyser.connect(audioCtx.destination)
@@ -60,15 +70,15 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
       }
     }
 
-    if (isPlaying && audioElement.src) {
+    if (isPlaying && audioElement?.src) {
       setupAudioAnalyser()
     }
 
     const draw = () => {
       animationRef.current = requestAnimationFrame(draw)
 
-      const width = canvas.width
-      const height = canvas.height
+      const width = canvas.width / dpr
+      const height = canvas.height / dpr
 
       ctx.clearRect(0, 0, width, height)
 
@@ -94,8 +104,8 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
       for (let i = 0; i < bufferLength; i++) {
         let v = dataArray[i] / 128.0
         if (!analyserRef.current && isPlaying) {
-          // Fallback animated sine wave for OS native TTS speaking or disabled AudioNodes
-          v = 1.0 + 0.3 * Math.sin(i * 0.2 + Date.now() * 0.015) * Math.sin(Date.now() * 0.005)
+          // Fallback animated sine wave for OS native TTS speaking
+          v = 1.0 + 0.35 * Math.sin(i * 0.2 + Date.now() * 0.015) * Math.sin(Date.now() * 0.005)
         } else if (!isPlaying) {
           // Ambient idle visual state
           v = 1.0 + 0.03 * Math.sin(i * 0.15 + Date.now() * 0.003)
@@ -112,26 +122,27 @@ export const Waveform: React.FC<WaveformProps> = ({ isPlaying }) => {
         x += sliceWidth
       }
 
-      ctx.lineTo(canvas.width, canvas.height / 2)
+      ctx.lineTo(width, height / 2)
       ctx.stroke()
     }
 
     draw()
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas)
+      resizeObserver.disconnect()
       cancelAnimationFrame(animationRef.current)
     }
   }, [isPlaying, audioElement])
 
   return (
-    <div className="relative w-full rounded-lg border border-border bg-black/35 p-1 overflow-hidden select-none">
-      <canvas ref={canvasRef} className="block w-full h-20" />
+    <div ref={containerRef} className="relative w-full rounded-xl border border-border/80 bg-black/40 p-1.5 overflow-hidden select-none shadow-inner">
+      <canvas ref={canvasRef} className="block w-full" />
       {!isPlaying && (
-        <div className="absolute inset-0 flex items-center justify-center text-[9px] text-muted-foreground uppercase tracking-widest font-semibold opacity-70 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground/70 uppercase tracking-widest font-semibold pointer-events-none">
           Audio Idle
         </div>
       )}
     </div>
   )
 }
+

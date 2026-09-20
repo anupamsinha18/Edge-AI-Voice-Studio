@@ -119,11 +119,11 @@ export const History: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full flex-col bg-background p-6 overflow-hidden">
+    <div className="flex h-full flex-col bg-background p-3 sm:p-6 pb-24 sm:pb-6 overflow-hidden">
       {/* Header and Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Generation History</h2>
+          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">Generation History</h2>
           <p className="text-xs text-muted-foreground mt-0.5">Manage and replay locally cached voice files.</p>
         </div>
 
@@ -134,7 +134,7 @@ export const History: React.FC = () => {
                 clearAllHistory()
               }
             }}
-            className="flex items-center gap-1.5 self-start md:self-auto rounded-lg border border-destructive/20 hover:bg-destructive/10 text-destructive text-xs font-semibold px-3 py-2 transition-all"
+            className="flex items-center gap-1.5 self-start sm:self-auto rounded-xl border border-destructive/20 hover:bg-destructive/10 text-destructive text-xs font-semibold px-3 py-2 transition-all active:scale-95"
             type="button"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -144,7 +144,7 @@ export const History: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6 bg-secondary/20 p-3 rounded-xl border border-border">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 mb-4 sm:mb-6 bg-secondary/30 p-2.5 sm:p-3 rounded-2xl border border-border">
         {/* Search */}
         <div className="relative sm:col-span-2">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -153,7 +153,7 @@ export const History: React.FC = () => {
             placeholder="Search saved text or names..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-border bg-background pl-9 pr-4 py-2 text-xs text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+            className="w-full rounded-xl border border-border bg-background pl-9 pr-4 py-2 text-xs text-foreground focus:outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -161,7 +161,7 @@ export const History: React.FC = () => {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as 'date_desc' | 'date_asc' | 'name_asc' | 'duration_desc')}
-          className="rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none transition-colors"
+          className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none transition-colors"
         >
           <option value="date_desc">Newest First</option>
           <option value="date_asc">Oldest First</option>
@@ -172,7 +172,7 @@ export const History: React.FC = () => {
         {/* Favorites Filter */}
         <button
           onClick={() => setFilterFavorite(!filterFavorite)}
-          className={`flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
+          className={`flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition-all active:scale-95 ${
             filterFavorite
               ? 'bg-primary/10 border-primary/30 text-primary'
               : 'border-border bg-background text-muted-foreground hover:text-foreground'

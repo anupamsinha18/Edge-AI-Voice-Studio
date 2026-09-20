@@ -100,9 +100,9 @@ export const Settings: React.FC = () => {
   ] as const
 
   return (
-    <div className="flex h-full flex-col bg-background p-6 overflow-y-auto space-y-6">
+    <div className="flex h-full flex-col bg-background p-3 sm:p-6 pb-24 sm:pb-6 overflow-y-auto space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-foreground">Studio Settings</h2>
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">Studio Settings</h2>
         <p className="text-xs text-muted-foreground mt-0.5">Configure system aesthetics, default parameters, and cache controls.</p>
       </div>
 
@@ -113,7 +113,7 @@ export const Settings: React.FC = () => {
         <h3 className="text-sm font-semibold text-foreground">Aesthetics</h3>
         <p className="text-xs text-muted-foreground">Select how the Studio looks on your device.</p>
         
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 max-w-xl">
           {themeOptions.map((opt) => {
             const Icon = opt.icon
             const active = theme === opt.value
@@ -121,9 +121,9 @@ export const Settings: React.FC = () => {
               <button
                 key={opt.value}
                 onClick={() => setTheme(opt.value)}
-                className={`flex items-center gap-3 rounded-lg border p-3 text-sm font-medium transition-all ${
+                className={`flex items-center gap-3 rounded-xl border p-3 text-sm font-medium transition-all active:scale-95 ${
                   active
-                    ? 'border-primary bg-primary/10 text-primary'
+                    ? 'border-primary bg-primary/10 text-primary font-semibold shadow-sm'
                     : 'border-border bg-card/40 hover:bg-secondary/40 text-muted-foreground hover:text-foreground'
                 }`}
                 type="button"

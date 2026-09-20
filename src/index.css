@@ -110,8 +110,8 @@
 
 /* Custom scrollbar for dark mode premium design */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -126,3 +126,18 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.5);
 }
+
+/* Hide scrollbar for horizontal chip containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Mobile touch improvements */
+button, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+

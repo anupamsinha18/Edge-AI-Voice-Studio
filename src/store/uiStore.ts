@@ -7,10 +7,13 @@ interface UiState {
   activeTab: Tab
   theme: Theme
   sidebarOpen: boolean
+  mobileDrawerOpen: boolean
   
   setActiveTab: (tab: Tab) => void
   setTheme: (theme: Theme) => void
   toggleSidebar: () => void
+  setMobileDrawerOpen: (open: boolean) => void
+  toggleMobileDrawer: () => void
   applyTheme: () => void
 }
 
@@ -18,8 +21,9 @@ export const useUiStore = create<UiState>((set, get) => ({
   activeTab: 'workspace',
   theme: 'dark', // Default to premium dark mode
   sidebarOpen: true,
+  mobileDrawerOpen: false,
 
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  setActiveTab: (tab) => set({ activeTab: tab, mobileDrawerOpen: false }),
   
   setTheme: (theme) => {
     set({ theme })
@@ -27,6 +31,9 @@ export const useUiStore = create<UiState>((set, get) => ({
   },
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  
+  setMobileDrawerOpen: (open) => set({ mobileDrawerOpen: open }),
+  toggleMobileDrawer: () => set((state) => ({ mobileDrawerOpen: !state.mobileDrawerOpen })),
 
   applyTheme: () => {
     if (typeof window === 'undefined') return

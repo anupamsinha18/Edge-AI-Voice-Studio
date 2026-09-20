@@ -34,7 +34,7 @@ export const StatusBar: React.FC = () => {
   }
 
   return (
-    <footer className="flex h-8 items-center justify-between border-t border-border bg-card/10 px-4 text-[10px] text-muted-foreground select-none">
+    <footer className="hidden md:flex h-8 shrink-0 items-center justify-between border-t border-border bg-card/20 px-4 text-[10px] text-muted-foreground select-none">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
           <div className={`h-1.5 w-1.5 rounded-full ${isGenerating ? 'bg-green-500 animate-pulse' : isInitializing ? 'bg-yellow-500 animate-pulse' : 'bg-primary'}`} />
@@ -53,7 +53,7 @@ export const StatusBar: React.FC = () => {
           <span>Engine: <strong className="text-foreground uppercase">{activeEngineId}</strong></span>
         </div>
 
-        <div className="hidden sm:flex items-center gap-1 text-[9px] text-muted-foreground border-l border-border pl-4">
+        <div className="flex items-center gap-1 text-[9px] text-muted-foreground border-l border-border pl-4">
           <ShieldAlert className="h-2.5 w-2.5" />
           <span>Offline First</span>
         </div>
